@@ -12,6 +12,7 @@ public:
     void begin(unsigned long baudRate = 9600, unsigned long ms = 1000);
     void update();
     void write3x3char4(const char *charArray);
+    void write3x3char2andBars(const char *charArray, double bar1, double bar2, double bar3, bool flag);
     void write(const byte data[7], bool autoUpdate = true);
     void clear();
     void setInverted(bool inverted);

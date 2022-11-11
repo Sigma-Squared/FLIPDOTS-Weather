@@ -3,9 +3,9 @@
 #define HEADER 0x80
 #define ENDCHAR 0x8f
 
-#define CMD_WRITE_UPDATE (byte) 0x87
-#define CMD_WRITE (byte) 0x88
-#define CMD_UPDATE (byte) 0x82
+#define CMD_WRITE_UPDATE (byte)0x87
+#define CMD_WRITE (byte)0x88
+#define CMD_UPDATE (byte)0x82
 
 const byte font3x3Glyphs[][3] = {
     {0b010, 0b111, 0b101}, /* A */
@@ -58,7 +58,7 @@ void FLIPDOTS::begin(unsigned long baudRate, unsigned long ms)
     delay(ms);
 }
 
-/* 
+/*
  * Force the display to update with whatever is in its buffer
  */
 void FLIPDOTS::update()
@@ -112,6 +112,37 @@ void FLIPDOTS::clear()
 {
     const byte clear[7] = {0};
     write(clear);
+}
+
+void FLIPDOTS::write3x3char2andBars(const char *charArray, double bar1, double bar2, double bar3, bool flag)
+{
+    byte data[7] = {0};
+    const byte *g1 = get3x3FontGlyph(charArray[0]);
+    const byte *g2 = get3x3FontGlyph(charArray[1]);
+
+    for (uint8_t i = 0; i < 7; i++)
+    {
+        // fill
+        uint8_t fillCount1 = lround(bar1 * 7);
+        uint8_t fillCount2 = lround(bar2 * 7);
+        uint8_t fillCount3 = lround(bar3 * 7);
+        data[i] = ((fillCount1 > i) << 6) | ((fillCount2 > i) << 5) | ((fillCount3 > i) << 4);
+        // chars
+        if (i < 3)
+        {
+            data[i] |= g2[2 - i];
+        }
+        else if (i > 3)
+        {
+            data[i] |= g1[6 - i];
+        }
+        else if (flag) // middle flag
+        {
+            data[i] |= 0b00001000;
+        }
+    }
+
+    write(data);
 }
 
 const byte *FLIPDOTS::get3x3FontGlyph(char c)
