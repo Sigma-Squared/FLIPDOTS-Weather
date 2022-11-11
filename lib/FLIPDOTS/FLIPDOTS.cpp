@@ -3,9 +3,9 @@
 #define HEADER 0x80
 #define ENDCHAR 0x8f
 
-#define CMD_WRITE_UPDATE 0x87
-#define CMD_WRITE 0x88
-#define CMD_UPDATE 0x82
+#define CMD_WRITE_UPDATE (byte) 0x87
+#define CMD_WRITE (byte) 0x88
+#define CMD_UPDATE (byte) 0x82
 
 const byte font3x3Glyphs[][3] = {
     {0b010, 0b111, 0b101}, /* A */
